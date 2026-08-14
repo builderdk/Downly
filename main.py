@@ -1,3 +1,4 @@
+from app.api import app
 from app.extractor import (
     get_video_info,
     get_available_resolutions
