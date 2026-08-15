@@ -59,7 +59,7 @@ const CheckIcon = () => (
   </svg>
 );
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "https://downly-2ykz.onrender.com";
 
 function App() {
   const [url, setUrl] = useState("");
