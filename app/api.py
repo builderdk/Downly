@@ -447,20 +447,19 @@ def health():
 
 
 @app.get("/debug-youtube")
-def debug_youtube():
-
-    test_url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+def debug_youtube(url: str):
 
     try:
+
         options = {
             "quiet": False,
             "no_warnings": False,
-            "skip_download": True,
         }
 
         with yt_dlp.YoutubeDL(options) as ydl:
+
             info = ydl.extract_info(
-                test_url,
+                url,
                 download=False
             )
 
@@ -468,7 +467,7 @@ def debug_youtube():
             "success": True,
             "title": info.get("title"),
             "extractor": info.get("extractor"),
-            "message": "YouTube request from Render succeeded."
+            "id": info.get("id"),
         }
 
     except Exception as error:
@@ -480,10 +479,8 @@ def debug_youtube():
         return {
             "success": False,
             "error_type": type(error).__name__,
-            "error": str(error)
+            "error": str(error),
         }
-
-
 # ==========================================
 # VIDEO INFORMATION
 # ==========================================
