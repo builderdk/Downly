@@ -2,6 +2,8 @@ import os
 import uuid
 import threading
 import re
+import shutil
+import subprocess
 
 import yt_dlp
 import time
@@ -450,6 +452,19 @@ def health():
 def debug_youtube(url: str):
 
     try:
+        deno_path = shutil.which("deno")
+
+        deno_version = None
+
+        if deno_path:
+            result = subprocess.run(
+                ["deno", "--version"],
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+
+            deno_version = result.stdout.strip()
 
         options = {
             "quiet": False,
@@ -457,7 +472,6 @@ def debug_youtube(url: str):
         }
 
         with yt_dlp.YoutubeDL(options) as ydl:
-
             info = ydl.extract_info(
                 url,
                 download=False
@@ -467,19 +481,17 @@ def debug_youtube(url: str):
             "success": True,
             "title": info.get("title"),
             "extractor": info.get("extractor"),
-            "id": info.get("id"),
+            "deno_path": deno_path,
+            "deno_version": deno_version,
         }
 
     except Exception as error:
-
-        print(
-            f"[DEBUG YOUTUBE ERROR] {error}"
-        )
 
         return {
             "success": False,
             "error_type": type(error).__name__,
             "error": str(error),
+            "deno_path": shutil.which("deno"),
         }
 # ==========================================
 # VIDEO INFORMATION
