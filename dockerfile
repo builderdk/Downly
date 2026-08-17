@@ -1,9 +1,20 @@
+# ==========================================
+# DENO BINARY
+# ==========================================
+FROM denoland/deno:bin-2.9.4 AS deno
+
+# ==========================================
+# PYTHON BACKEND
+# ==========================================
 FROM python:3.11-slim
 
 # Install FFmpeg
 RUN apt-get update && \
-    apt-get install -y ffmpeg && \
+    apt-get install -y --no-install-recommends ffmpeg && \
     rm -rf /var/lib/apt/lists/*
+
+# Copy Deno binary from official Deno image
+COPY --from=deno /deno /usr/local/bin/deno
 
 # Application directory
 WORKDIR /app
