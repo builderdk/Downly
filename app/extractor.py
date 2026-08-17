@@ -8,7 +8,6 @@ import tempfile
 # ==========================================
 # GET VIDEO INFORMATION
 # ==========================================
-
 def get_video_info(url):
 
     options = {
@@ -16,14 +15,17 @@ def get_video_info(url):
         "no_warnings": True,
     }
 
+    proxy = os.getenv("YTDLP_PROXY")
+
+    if proxy:
+        options["proxy"] = proxy
+
     with yt_dlp.YoutubeDL(options) as ydl:
 
         return ydl.extract_info(
             url,
             download=False
         )
-
-
 # ==========================================
 # GET AVAILABLE VIDEO RESOLUTIONS
 # ==========================================
